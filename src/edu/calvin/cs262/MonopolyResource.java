@@ -28,6 +28,9 @@ import java.util.*;
  * @author kvlinden
  * @version summer, 2015 - original version
  * @version summer, 2016 - upgraded to JSON; added Player POJO; removed unneeded libraries
+ *
+ * Completed By: Zach Wibbenmeyer
+ * Date: November 11, 2016
  */
 @Path("/monopoly")
 public class MonopolyResource {
@@ -55,15 +58,43 @@ public class MonopolyResource {
     @Produces("application/json")
     public String getPlayers() {
         try {
-            // As an example of GSON, we'll hard-code a couple players and return their JSON representation.
-            List<Player> hardCodedPlayers = new ArrayList<>();
-            hardCodedPlayers.add(new Player(1, "jdoe1", "John Doe"));
-            hardCodedPlayers.add(new Player(2, "jdoe2", "Jane Doe"));
-            return new Gson().toJson(hardCodedPlayers);
+            return new Gson().toJson(retrievePlayers());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static final String DB_URI = "jdbc:postgresql://localhost:5432/monopoly";
+    private static final String DB_LOGIN_ID = "postgres";
+    private static final String DB_PASSWORD = "Pitcher35!";
+
+    /*
+     * retrievePlayers() - retrieves Monopoly players from the Postgresql database
+     * @param: None
+     * @return: List of Players
+     */
+    private List retrievePlayers() throws Exception {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        List players = new ArrayList<>();
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(DB_URI, DB_LOGIN_ID, DB_PASSWORD);
+            statement = connection.createStatement();
+            rs = statement.executeQuery("SELECT * FROM Player");
+            while (rs.next()) {
+                players.add(new Player(rs.getInt(1), rs.getString(2), rs.getString(3)));
+            }
+        } catch (SQLException e) {
+            throw (e);
+        } finally {
+            rs.close();
+            statement.close();
+            connection.close();
+        }
+        return players;
     }
 
     /**
