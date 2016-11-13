@@ -35,6 +35,10 @@ import java.util.*;
 @Path("/monopoly")
 public class MonopolyResource {
 
+    private static final String DB_URI = "jdbc:postgresql://localhost:5432/monopoly";
+    private static final String DB_LOGIN_ID = "postgres";
+    private static final String DB_PASSWORD = "Pitcher35!";
+
     /**
      * a hello-world resource
      *
@@ -64,10 +68,6 @@ public class MonopolyResource {
         }
         return null;
     }
-
-    private static final String DB_URI = "jdbc:postgresql://localhost:5432/monopoly";
-    private static final String DB_LOGIN_ID = "postgres";
-    private static final String DB_PASSWORD = "Pitcher35!";
 
     /*
      * retrievePlayers() - retrieves Monopoly players from the Postgresql database
