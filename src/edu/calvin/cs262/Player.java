@@ -13,6 +13,11 @@ public class Player {
 
     Player() { /* a default constructor, required by Gson */  }
 
+    /*
+     * Player() - object prototype for the Player class
+     * @param: id (type -> int), emailaddress (type -> String), name (type -> String)
+     * @return: the params assigned to the private variables
+     */
     Player(int id, String emailaddress, String name) {
         this.id = id;
         this.emailaddress = emailaddress;
